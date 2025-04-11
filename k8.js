@@ -4,14 +4,6 @@ var mySidebar = document.getElementById("mySidebar");
 // Get the DIV with overlay effect
 var overlayBg = document.getElementById("myOverlay");
 
-
-    window.onload = () => {
-      setTimeout(() => {
-		 document.getElementsByClassName('k8-loader')[0].style.display = 'none';
-       
-      }, 1000); 
-    };
-	
 // Toggle between showing and hiding the sidebar, and add overlay effect
 function k8_open() {
   if (mySidebar.style.display === 'block') {
@@ -22,6 +14,59 @@ function k8_open() {
     overlayBg.style.display = "block";
   }
 }
+
+const formatter = new Intl.NumberFormat('en-IN', {
+  style: 'currency',
+  currency: 'INR',
+
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+});
+
+
+function toggleDropdown(el) {
+ let dropdown = el.nextElementSibling;
+  if (dropdown) {
+    dropdown.classList.toggle("k8-hide");
+    console.log("Dropdown toggled!"); // Debugging log
+  } else {
+    console.error("Dropdown element not found!");
+  }
+   let icon = el.querySelector("i");
+   if (dropdown.classList.contains("k8-hide")) {
+      icon.classList.replace("fa-caret-down", "fa-caret-right");
+    } else {
+      icon.classList.replace("fa-caret-right", "fa-caret-down");
+    }
+  
+  
+}
+
+
+function epoachjs(epochTime){
+	const date = new Date(epochTime * 1000); // Convert seconds to milliseconds
+
+        // Extract date components
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+
+        // Extract time components
+        let hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        // Determine AM or PM
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert to 12-hour format
+        //hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+
+        // Format as "YYYY-MM-DD HH:mm AM/PM"
+        return `${day}-${month}-${year}, ${hours}:${minutes} ${ampm}`;
+
+}
+
 function selectElement(id, valueToSelect) {    
     let element = document.getElementById(id);
     element.value = valueToSelect;
@@ -31,15 +76,7 @@ function k8_close() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
-function k8_dash_nav_toggle(){
-	var nav=document.getElementsByClassName("k8-dash-nav")[0];
-	if(nav.style.display==="block"){
-		nav.style.display="none";
-	}else{
-		nav.style.display="block";
-	}
-	
-}
+
 function v_blur(){
 const blr=document.getElementsByClassName('k8-blur');
 for (let i = 0; i < blr.length; i++) { 
@@ -48,7 +85,10 @@ if(blr[i].style.display==="block"){
 }else{
 blr[i].style.display="block";
 }}}
-
+ function openInNewTab(imageElement) {
+	 //console.log(imageElement.src);
+      window.open(imageElement.src, '_blank');
+    }
 function wclose(el){
 	el.parentNode.parentNode.remove();
 }
@@ -90,26 +130,7 @@ function confirm_action(el){
 	
 }
 
-function k8_drops() {
-  document.getElementById("k8_drops").classList.toggle("show");
-}
 
-function filterFunction() {
-  const input = document.getElementById("k8_drops_input");
-  const filter = input.value.toUpperCase();
-  const div = document.getElementById("k8_drops");
-  const a = div.getElementsByTagName("a");
-  for (let i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-	 document.getElementById("display").style.display = ""; 
-    } else {
-      a[i].style.display = "none";
-	   document.getElementById("display").style.display = ""; 
-    }
-  }
-}
 
 
 function makeDragable(dragHandle) {
@@ -254,8 +275,17 @@ document.getElementsByClassName("k8-box")[0].querySelector(".wbody").innerHTML=h
 function searchTable(input) {
     var  filter, found, table, tr, td, i, j;
     filter = input.value.toUpperCase();
-    table = document.getElementsByClassName("sctable");
-    tr = table[0].getElementsByTagName("tr");
+	var inputs = document.getElementsByClassName("filter");
+	index = Array.from(inputs).indexOf(input);
+	 table = document.getElementsByClassName("sctable");
+	 
+	 
+	if(!table[index]){
+	index = 0;	    
+	}
+		
+    tr = table[index].getElementsByTagName("tr");
+	
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
         for (j = 0; j < td.length; j++) {

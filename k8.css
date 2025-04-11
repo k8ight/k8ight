@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --theme:#ff0000;
   --theme-text:#fff;
   --barback:#ff0000;
@@ -60,7 +60,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin
 .k8-select{padding:9px;width:100%;border:none;border-bottom:1px solid #ccc}.k8-textarea{padding:8px;display:block;border:none;border-bottom:1px solid #ccc;width:100%;resize: none}
 .k8-dropdown-click,.k8-dropdown-hover{position:relative;display:inline-block;cursor:pointer}
 .k8-dropdown-hover:hover .k8-dropdown-content{display:block}
-.k8-dropdown-hover:first-child,.k8-dropdown-click:hover{background-color:#ccc;color:#000}
+.k8-dropdown-hover:first-child,.k8-dropdown-click:hover{background-color:inherit;color:inherit}
 .k8-dropdown-hover:hover > .k8-button:first-child,.k8-dropdown-click:hover > .k8-button:first-child{opacity: 0.5}
 .k8-dropdown-content{cursor:auto;color:#000;background-color:#fff;display:none;position:absolute;min-width:160px;margin:0;padding:0;z-index:1}
 .k8-check,.k8-radio{width:24px;height:24px;position:relative;top:6px}
@@ -269,19 +269,19 @@ h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin
 .k8-altmtr{width:100%; -webkit-appearance: none; height: 4px;}
 .k8-altmtr::-webkit-meter-optimum-value {
   background: #f4511e;
-}
+}.k8-dropdown-click .k8-bar-block{padding: 0px 16px;}
 .k8-sidebar-dark{background-color:#003366;color:#ffffff}
 .k8-sidebar-light{background-color:#f3f4f7;color:#000000}
 .k8-blur{
-	display:none;
-width:100%;
-height:100%;
-	background-color:#d6dfee;
-	top:0;
-	left:0;
-	position:fixed;
-	z-index:100;
-	opacity:0.8;
+	display: none;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(214, 223, 238, 0.4);
+  backdrop-filter: blur(4px);
 }
 .k8-altmtr::-moz-meter-bar { /* Firefox Pseudo Class */
   background: #f4511e;
@@ -969,7 +969,17 @@ position:fixed !important;
 
 }
 .k8-modal {
-            display: none;        position: fixed;            z-index: 10;            top:0;	    left:0;            width: 100vw;            height: 100vh;            background-color: rgba(0, 0, 0, 0.4);            backdrop-filter: blur(4px);}
+            display: none;
+            position: fixed;
+            z-index: 100;
+             top:0;
+			 left:0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(214, 223, 238, 0.4);
+            backdrop-filter: blur(4px);
+			
+        }
         
         /* Centered Popup */
         .k8-modal-popup {
