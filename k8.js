@@ -43,6 +43,72 @@ function toggleDropdown(el) {
   
 }
 
+function date(format, epoch = null) {
+  // If no epoch given, use current time
+  let timestamp = epoch ? Number(epoch) : Date.now();
+
+  // If epoch is in seconds, convert to milliseconds
+  if (timestamp.toString().length === 10) {
+    timestamp *= 1000;
+  }
+
+  const d = new Date(timestamp);
+
+  const pad = (n, c = 2) => String(n).padStart(c, '0');
+
+  const map = {
+    // Day
+    d: pad(d.getDate()),          // Day with leading zero 01-31
+    D: d.toLocaleString('en-us', { weekday: 'short' }), // Mon-Sun
+    j: d.getDate(),               // Day without leading zero 1-31
+    l: d.toLocaleString('en-us', { weekday: 'long' }),  // Monday-Sunday
+    N: d.getDay() === 0 ? 7 : d.getDay(), // ISO-8601 numeric day 1(Mon)-7(Sun)
+    S: (function() {              // English ordinal suffix
+      const day = d.getDate();
+      if(day % 10 === 1 && day !== 11) return 'st';
+      if(day % 10 === 2 && day !== 12) return 'nd';
+      if(day % 10 === 3 && day !== 13) return 'rd';
+      return 'th';
+    })(),
+    w: d.getDay(),                // Numeric day 0(Sun)-6(Sat)
+    z: Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000), // Day of year
+
+    // Week
+    W: (function() {              // ISO-8601 week number
+      const onejan = new Date(d.getFullYear(),0,1);
+      return Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
+    })(),
+
+    // Month
+    F: d.toLocaleString('en-us', { month: 'long' }), // January-December
+    m: pad(d.getMonth() + 1),    // 01-12
+    M: d.toLocaleString('en-us', { month: 'short' }), // Jan-Dec
+    n: d.getMonth() + 1,         // 1-12
+    t: new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(), // Days in month
+
+    // Year
+    L: ((d.getFullYear()%4===0 && d.getFullYear()%100!==0) || (d.getFullYear()%400===0)) ? 1 : 0, // Leap year
+    o: d.getFullYear(),           // ISO-8601 year number
+    Y: d.getFullYear(),           // Full year 2025
+    y: String(d.getFullYear()).slice(-2), // Two-digit year
+
+    // Time
+    a: d.getHours() < 12 ? 'am' : 'pm',
+    A: d.getHours() < 12 ? 'AM' : 'PM',
+    g: d.getHours() % 12 || 12,  // 1-12
+    G: d.getHours(),             // 0-23
+    h: pad(d.getHours() % 12 || 12), // 01-12
+    H: pad(d.getHours()),        // 00-23
+    i: pad(d.getMinutes()),      // 00-59
+    s: pad(d.getSeconds()),      // 00-59
+    u: pad(d.getMilliseconds()*1000,6), // Microseconds
+  };
+
+  // Replace all recognized format characters
+  return format.replace(/\\?([a-zA-Z])/g, function(_, char) {
+    return map[char] !== undefined ? map[char] : char;
+  });
+}
 
 function epoachjs(epochTime){
 	const date = new Date(epochTime * 1000); // Convert seconds to milliseconds
@@ -305,4 +371,5 @@ function searchTable(input) {
 function setfilter(el){
 document.getElementById("filter").value=el.id;	
 searchTable();
+
 }
