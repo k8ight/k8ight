@@ -43,25 +43,46 @@ function toggleDropdown(el) {
   
 }
 
-//PHP date function in Javascript UTC only no local timezone convert like php
-function date(format, epoch = null) {
+//PHP date function in Javascript
+
+function date(format, epoch = null, tzOffset = 330) { //PHP DATE FUNCTION IN JS WITH TZ OFFSET 330 munites = +5:30 IST
   let timestamp = epoch ? Number(epoch) : Date.now();
 
-  // If epoch is in seconds, convert to milliseconds
-  if (timestamp.toString().length === 10) {
-    timestamp *= 1000;
-  }
+  // Convert seconds to milliseconds
+  if (timestamp.toString().length === 10) timestamp *= 1000;
+
+  // Apply timezone offset (in minutes)
+  // JS Date is always in local/UTC, so we shift timestamp manually
+  timestamp += tzOffset * 60 * 1000;
 
   const d = new Date(timestamp);
 
   const pad = (n, c = 2) => String(n).padStart(c, '0');
 
+  // ISO week number
+  const getISOWeek = (date) => {
+    const target = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    const dayNr = (target.getUTCDay() + 6) % 7;
+    target.setUTCDate(target.getUTCDate() - dayNr + 3);
+    const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+    return 1 + Math.round((target - firstThursday) / (7 * 86400000));
+  };
+
+  // ISO year
+  const getISOYear = (date) => {
+    const week = getISOWeek(date);
+    let year = date.getUTCFullYear();
+    if (week === 1 && date.getUTCMonth() === 11) year += 1;
+    if (week >= 52 && date.getUTCMonth() === 0) year -= 1;
+    return year;
+  };
+
   const map = {
     // Day
     d: pad(d.getUTCDate()),
-    D: d.toLocaleString('en-us', { weekday: 'short', timeZone: 'UTC' }),
+    D: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getUTCDay()],
     j: d.getUTCDate(),
-    l: d.toLocaleString('en-us', { weekday: 'long', timeZone: 'UTC' }),
+    l: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getUTCDay()],
     N: d.getUTCDay() === 0 ? 7 : d.getUTCDay(),
     S: (() => {
       const day = d.getUTCDate();
@@ -74,21 +95,18 @@ function date(format, epoch = null) {
     z: Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 0)) / 86400000),
 
     // Week
-    W: (() => {
-      const onejan = Date.UTC(d.getUTCFullYear(), 0, 1);
-      return Math.ceil((((d - onejan) / 86400000) + new Date(onejan).getUTCDay() + 1) / 7);
-    })(),
+    W: getISOWeek(d),
 
     // Month
-    F: d.toLocaleString('en-us', { month: 'long', timeZone: 'UTC' }),
+    F: ['January','February','March','April','May','June','July','August','September','October','November','December'][d.getUTCMonth()],
     m: pad(d.getUTCMonth() + 1),
-    M: d.toLocaleString('en-us', { month: 'short', timeZone: 'UTC' }),
+    M: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()],
     n: d.getUTCMonth() + 1,
     t: new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).getUTCDate(),
 
     // Year
     L: ((d.getUTCFullYear() % 4 === 0 && d.getUTCFullYear() % 100 !== 0) || (d.getUTCFullYear() % 400 === 0)) ? 1 : 0,
-    o: d.getUTCFullYear(),
+    o: getISOYear(d),
     Y: d.getUTCFullYear(),
     y: String(d.getUTCFullYear()).slice(-2),
 
@@ -373,4 +391,5 @@ document.getElementById("filter").value=el.id;
 searchTable();
 
 }
+
 
