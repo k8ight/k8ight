@@ -14,6 +14,21 @@ function k8_open() {
     overlayBg.style.display = "block";
   }
 }
+let footerHash = "";
+
+crypto.subtle.digest(
+  "SHA-256",
+  new TextEncoder().encode(
+    document.querySelector("footer").innerHTML
+  )
+).then(b => {
+  footerHash = [...new Uint8Array(b)]
+    .map(x => x.toString(16).padStart(2, "0"))
+    .join("");
+if(footerHash !=="19067cba05d1d56d094cb71380a25124dc088cfe1386448579c51cb5ccfa7f0c"){
+	 document.querySelector("body").innerHTML="<h1 class='k8-text-red k8-padding'>License void — base code tampered. Refer: KOSLv1 <a href='https://raw.githubusercontent.com/k8ight/k8ight/refs/heads/main/LICENSE' class='k8-text-blue'>https://raw.githubusercontent.com/k8ight/k8ight/refs/heads/main/LICENSE</a></h1>";
+}
+});
 
 const formatter = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -22,9 +37,40 @@ const formatter = new Intl.NumberFormat('en-IN', {
   // These options are needed to round to whole numbers if that's what you want.
   //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
   //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-});
+}); 
+ /*multi curency demo format.in.format(1234567.89);*/
+const format = {
+  in: new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR'
+  }),
 
+  us: new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }),
 
+  eu: new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR'
+  }),
+
+  ru: new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB'
+  }),
+
+  jp: new Intl.NumberFormat('ja-JP', {
+    style: 'currency',
+    currency: 'JPY'
+  }),
+
+  cn: new Intl.NumberFormat('zh-CN', {
+    style: 'currency',
+    currency: 'CNY'
+  })
+};
+ /*multi curency demo format.in.format(1234567.89);*/
 function toggleDropdown(el) {
  let dropdown = el.nextElementSibling;
   if (dropdown) {
@@ -42,8 +88,6 @@ function toggleDropdown(el) {
   
   
 }
-
-//PHP date function in Javascript
 
 function date(format, epoch = null, tzOffset = 330) { //PHP DATE FUNCTION IN JS WITH TZ OFFSET 330 munites = +5:30 IST
   let timestamp = epoch ? Number(epoch) : Date.now();
@@ -126,7 +170,111 @@ function date(format, epoch = null, tzOffset = 330) { //PHP DATE FUNCTION IN JS 
     map[char] !== undefined ? map[char] : char
   );
 }
+/*auto modal*/
+(function ensureModal() {
+  function addModal() {
+    if (document.getElementById('modal')) return;
 
+    const html = `
+<div id="modal" class="k8-popup k8-white">
+  <div class="head k8-indigo k8-padding">
+    <div class="title">Dynamic Window</div>
+    <button class="k8-btn k8-red" onclick="closeModal(this);">
+      <i class="fa fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="body k8-white k8-border k8-custom-border">
+    <i class="fa fa-spinner"></i>
+  </div>
+</div>`;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addModal);
+  } else {
+    addModal();
+  }
+})();
+
+
+/*auto modal*/
+//dynamyc form handeler
+function form_handel(id="",trigger="",callback = null,url="./",success="✅ Table saved successfully!",failed="❌ Failed to save table!") {
+  const form = document.getElementById(id);
+  var notice = document.querySelector('#modal #notice');
+  success="<span class='k8-text-green k8-strong'>"+success+"</span>";
+  failed="<span class='k8-text-red k8-strong'>"+failed+"</span>";
+  
+  if (!id || !trigger ) {
+    console.warn(
+      "❌ form_handel() usage error:\n" +
+      "Required parameters missing.\n\n" +
+      "Correct usage:\n" +
+      "form_handel(formid, php $_REQUEST/POST['trigger'], callback [ default null ], url[ default ./ ], success text, failed text)"
+    );
+    return;
+  }
+  
+  if (form.dataset.bound) return;
+form.dataset.bound = "true";
+  
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+       if (!form.reportValidity()) {
+      return; // Stop if invalid
+    }
+	const btn = form.querySelector("button[type='submit']");
+	if (!notice){
+	  notice = document.createElement('div');
+	  notice.id="notice";
+      notice.className = 'k8-small k8-strong k8-padding-small';
+      notice.style.width = '100%'; 
+      btn.insertAdjacentElement('beforebegin', notice);
+  }
+	
+    const formData = new FormData(form);
+    formData.append(trigger, '1');	
+	
+    
+    btn.disabled = true;  
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.text();
+      
+      notice.innerHTML = "";
+
+      if (result.trim() === "200") {
+        notice.innerHTML = success;
+		if (callback && typeof callback === "function") {
+                    await callback(); // await in case it's async
+                }
+      } else {
+        notice.innerHTML = failed;
+      }
+    } catch (error) {
+      console.error("Error saving table:", error);
+    } finally {
+      btn.disabled = false;
+      
+	  //console.clear();
+    }
+  });
+}
+
+function closeModal(el) {
+  const modal = el.closest('#modal, .k8-popup');
+  if (!modal) return;
+   v_blur();
+ document.querySelector('#modal .body').innerHTML=` <span class="xloader">L &nbsp; ading</span>`;
+  modal.style.display = 'none';
+}
 
 function epoachjs(epochTime){
 	const date = new Date(epochTime * 1000); // Convert seconds to milliseconds
@@ -215,114 +363,94 @@ function confirm_action(el){
 }
 
 
+window.addEventListener('load', () => {
+  const loader = document.querySelector('.k8-loader');
+  if (!loader) return;
 
+  loader.style.transition = 'opacity 0.4s ease';
+
+  setTimeout(() => {
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 400);
+  }, 1000);
+});
+	
+$(document).ready(function() { 
+   setTimeout(function() { 
+    $('.autoHide').hide(); 
+  }, 10000);	
+  
+});
 
 function makeDragable(dragHandle) {
 
-  let dragObj = null; 
-
-  let xOffset = 0; 
-
+  let dragObj = null;
+  let xOffset = 0;
   let yOffset = 0;
 
+  const handles = document.querySelectorAll(dragHandle);
 
-for (var i = 0, len = document.querySelectorAll(dragHandle).length; i < len; i++) {
-    //work with checkboxes[i]
-document.querySelectorAll(dragHandle)[i].parentNode.style.zIndex="200";
- document.querySelectorAll(dragHandle)[i].addEventListener("mousedown", startDrag, true);
+  handles.forEach(handle => {
+    const target = handle.closest("#modal");
+    target.style.zIndex = target.style.zIndex || "200";
 
-  document.querySelectorAll(dragHandle)[i].addEventListener("touchstart", startDrag, true);
-}
+    handle.addEventListener("mousedown", startDrag);
+    handle.addEventListener("touchstart", startDrag, { passive: false });
 
+    function startDrag(e) {
+      e.preventDefault();
+      e.stopPropagation();
 
-  /*sets offset parameters and starts listening for mouse-move*/
+      dragObj = target;
+      dragObj.style.position = "fixed";
+      dragObj.style.transform = "none";
 
-  function startDrag(e) {
-  
-    e.preventDefault();
+      const rect = dragObj.getBoundingClientRect();
 
-    e.stopPropagation();
+      if (e.type === "mousedown") {
+        xOffset = e.clientX - rect.left;
+        yOffset = e.clientY - rect.top;
+        dragObj.style.zIndex = (+dragObj.style.zIndex || 200) + 1;
 
-    dragObj = this.parentNode;
-           
-    dragObj.style.position = "fixed";
-    let rect = dragObj.getBoundingClientRect();
+        window.addEventListener("mousemove", dragMove);
+        window.addEventListener("mouseup", stopDrag);
+      } else {
+        xOffset = e.touches[0].clientX - rect.left;
+        yOffset = e.touches[0].clientY - rect.top;
+        dragObj.style.zIndex = (+dragObj.style.zIndex || 200) + 1;
 
-     var onodes= dragObj.querySelectorAll(".whead");
-      for (var i = 0; i < onodes.length; i++) {
-		console.log(onodes.length); 
-	  }
-    if (e.type=="mousedown") {
-      xOffset = e.clientX - rect.left; 
-      dragObj.style.zIndex =  parseInt(dragObj.style.zIndex) + 1;
-      yOffset = e.clientY - rect.top;
-      window.addEventListener('mousemove', dragObject, true);
-  
-    } else if(e.type=="touchstart") {
-
-      xOffset = e.targetTouches[0].clientX - rect.left;
-      dragObj.style.zIndex =  parseInt(dragObj.style.zIndex) + 1;
-      yOffset = e.targetTouches[0].clientY - rect.top;
-
-      window.addEventListener('touchmove', dragObject, true);
-
+        window.addEventListener("touchmove", dragMove, { passive: false });
+        window.addEventListener("touchend", stopDrag);
+      }
     }
+  });
 
-  }
-
-
-
-  /*Drag object*/
-
-  function dragObject(e) {
+  function dragMove(e) {
+    if (!dragObj) return;
 
     e.preventDefault();
 
-    e.stopPropagation();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-  document.onmouseup = function(e) {
+    const maxX = window.innerWidth - dragObj.offsetWidth;
+    const maxY = window.innerHeight - dragObj.offsetHeight;
 
-    if (dragObj) {
-
-      dragObj = null;
-
-      window.removeEventListener('mousemove', dragObject, true);
-
-      window.removeEventListener('touchmove', dragObject, true);
-
-    }
-
+    dragObj.style.left = Math.max(0, Math.min(clientX - xOffset, maxX)) + "px";
+    dragObj.style.top  = Math.max(0, Math.min(clientY - yOffset, maxY)) + "px";
   }
-  
-    if(dragObj == null) {
 
-      return;
-
-    } else if(e.type=="mousemove") {
-
-     if(e.clientX-xOffset  >= 0 && (e.clientX-xOffset+ dragObj.clientWidth <= window.screen.width)){
-      dragObj.style.left = e.clientX-xOffset +"px"; 
-	 }
-       dragObj.style.transform = "inherit";
-	 if(e.clientY-yOffset  >= 0 && (e.clientY-yOffset+ dragObj.clientHeight <= window.screen.height) ){
-      dragObj.style.top = e.clientY-yOffset +"px";
-	 }
-    } else if(e.type=="touchmove") {
-
-      dragObj.style.left = e.targetTouches[0].clientX-xOffset +"px";
-      dragObj.style.transform = "inherit";
-      dragObj.style.top = e.targetTouches[0].clientY-yOffset +"px";
-
-    }
-
+  function stopDrag() {
+    dragObj = null;
+    window.removeEventListener("mousemove", dragMove);
+    window.removeEventListener("mouseup", stopDrag);
+    window.removeEventListener("touchmove", dragMove);
+    window.removeEventListener("touchend", stopDrag);
   }
-  /*End dragging*/
-
-
-
 }
 
-makeDragable(".whead");
+
+
 
 function show(formId) {
     document.getElementById(formId).style.display = 'block';
@@ -355,6 +483,91 @@ html=''+atob(el.getAttribute('data-addr'))+el.getAttribute('data-fname')+el.getA
 document.getElementsByClassName("k8-box")[0].querySelector(".wbody").innerHTML=html;
 }
 
+//SEARCH TABLE TABLE DIVS
+function searchTableDivs(input) {
+    var filter, found, containers, rows, cols, i, j;
+    filter = input.value.toUpperCase(); // convert input to uppercase
+    var inputs = document.getElementsByClassName("filter");
+    var index = Array.from(inputs).indexOf(input);
+    containers = document.getElementsByClassName("sctable"); // container for div "table"
+
+    if(!containers[index]){
+        index = 0;    
+    }
+
+    rows = containers[index].getElementsByClassName("k8-row");
+
+    for (i = 0; i < rows.length; i++) {
+        cols = rows[i].getElementsByClassName("k8-col");
+        found = false;
+        for (j = 0; j < cols.length; j++) {
+            if(cols[j].textContent.toUpperCase().indexOf(filter) > -1){
+                found = true;
+                break;
+            }
+        }
+        rows[i].style.display = found ? "" : "none";
+    }
+}
+document.addEventListener("click", function(e){
+  const openBtn = e.target.closest("[data-k8-modal]");
+  if(openBtn){
+    const target = document.querySelector(openBtn.dataset.k8Modal);
+    if(target) target.style.display = "block";
+  }
+
+  const closeBtn = e.target.closest("[data-k8-close]");
+  if(closeBtn){
+    closeBtn.closest(".k8-modal, .k8-popup").style.display = "none";
+  }
+});
+function k8Tabs(container){
+  const tabs = container.querySelectorAll("[data-k8-tab]");
+  const panels = container.querySelectorAll("[data-k8-panel]");
+
+  tabs.forEach(tab=>{
+    tab.addEventListener("click", ()=>{
+      const target = tab.dataset.k8Tab;
+
+      tabs.forEach(t=>t.classList.remove("k8-theme"));
+      panels.forEach(p=>p.style.display="none");
+
+      tab.classList.add("k8-theme");
+      container.querySelector(target).style.display="block";
+    });
+  });
+}
+
+document.querySelectorAll(".k8-tabs").forEach(k8Tabs);
+document.addEventListener("click", e=>{
+  const head = e.target.closest(".k8-acc-header");
+  if(!head) return;
+
+  const item = head.parentElement;
+  item.classList.toggle("active");
+});
+function k8Toast(msg,type="theme",time=3000){
+  const box = document.createElement("div");
+  box.className = `k8-toast k8-${type}`;
+  box.innerHTML = msg;
+
+  document.body.appendChild(box);
+
+  setTimeout(()=>box.remove(), time);
+}
+function k8Drawer(id){
+  const el = document.querySelector(id);
+  el.classList.toggle("active");
+}
+document.addEventListener("mouseover", e=>{
+  const el = e.target.closest("[data-k8-tip]");
+  if(!el) return;
+
+  const tip = document.createElement("div");
+  tip.className = "k8-tooltip-text";
+  tip.innerText = el.dataset.k8Tip;
+  el.appendChild(tip);
+});
 
 function searchTable(input) {
     var  filter, found, table, tr, td, i, j;
@@ -389,7 +602,4 @@ function searchTable(input) {
 function setfilter(el){
 document.getElementById("filter").value=el.id;	
 searchTable();
-
 }
-
-
