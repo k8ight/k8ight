@@ -135,8 +135,8 @@ USAGE
 ------------------------------------------------------------
 VERSION
 ------------------------------------------------------------
-k8.css : v3.0
-k8.js : v3.0
+k8.css : v2.0
+k8.js : v2.0
 K8 Modern UI Framework — Unified CSS + JS System
 
 # K8ight Open Source License (KOSL) v1.0  
