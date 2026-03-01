@@ -14,7 +14,35 @@ function k8_open() {
     overlayBg.style.display = "block";
   }
 }
-/*let footerHash = "";
+
+function otp(length = 8, type = "alphanumeric") {
+    let chars = "";
+
+   if (type === "numeric") {
+	let chars = "0123456789";   
+   }
+
+    if (type === "alpha") {
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    }
+    if (type === "alphanumeric") {
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    }
+
+    let result = "";
+    const randomValues = new Uint32Array(length);
+    crypto.getRandomValues(randomValues);
+
+    for (let i = 0; i < length; i++) {
+        result += chars[randomValues[i] % chars.length];
+    }
+
+    return result;
+}
+
+/* //only use for producion controll
+
+let footerHash = "";
 
 crypto.subtle.digest(
   "SHA-256",
@@ -28,7 +56,7 @@ crypto.subtle.digest(
 if(footerHash !=="19067cba05d1d56d094cb71380a25124dc088cfe1386448579c51cb5ccfa7f0c"){
 	 document.querySelector("body").innerHTML="<h1 class='k8-text-red k8-padding'>License void — base code tampered. Refer: KOSLv1 <a href='https://raw.githubusercontent.com/k8ight/k8ight/refs/heads/main/LICENSE' class='k8-text-blue'>https://raw.githubusercontent.com/k8ight/k8ight/refs/heads/main/LICENSE</a></h1>";
 }
-});*/
+});   */
 
 const formatter = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -90,10 +118,14 @@ function toggleDropdown(el) {
 }
 
 function date(format, epoch = null, tzOffset = 330) { //PHP DATE FUNCTION IN JS WITH TZ OFFSET 330 munites = +5:30 IST
-  let timestamp = epoch ? Number(epoch) : Date.now();
+  let timestamp = (epoch !== null && epoch !== undefined) 
+  ? Number(epoch) 
+  : Date.now();
 
   // Convert seconds to milliseconds
-  if (timestamp.toString().length === 10) timestamp *= 1000;
+  //if (timestamp.toString().length === 10) timestamp *= 1000;
+  
+  if (Math.abs(timestamp) < 1e12) timestamp *= 1000; //support 11Digit Seconds feature proof
 
   // Apply timezone offset (in minutes)
   // JS Date is always in local/UTC, so we shift timestamp manually
@@ -218,8 +250,8 @@ function form_handel(id="",trigger="",callback = null,url="./",success="✅ Tabl
     return;
   }
   
-  if (form.dataset.bound) return;
-form.dataset.bound = "true";
+  //if (form.dataset.bound) return;
+//form.dataset.bound = "true";
   
   form.addEventListener("submit", async function(e) {
     e.preventDefault();
@@ -258,21 +290,29 @@ form.dataset.bound = "true";
 
     // remove existing color classes (safe reset)
     btn.classList.remove("k8-green","k8-red","k8-blue","k8-orange");
-    btn.classList.add("k8-indigo");
+    btn.classList.add("k8-blue-grey");
 
     btn.innerHTML = "<i class='fa fa-xmark'></i> Close Window";
+     if (callback && typeof callback === "function") {
+		 console.log("CALLED");
+        await callback();
+    }else{console.log("CALLBACK-FAILED");}
 
     // remove old submit behavior just in case
     btn.onclick = null;
+    
+	const modal = form.closest('.k8-popup');
 
-    // attach close modal action
-    btn.addEventListener("click", function () {
-        closeModal(this);
-    });
-
-    if (callback && typeof callback === "function") {
-        await callback();
+if (modal) {
+    const closeBtn = modal.querySelector('.head .k8-btn.k8-red');
+    if (closeBtn) {
+        btn.onclick = function () {
+            closeBtn.click();
+        };
     }
+}
+
+    
 } else {
         notice.innerHTML = failed;
       }
@@ -367,18 +407,31 @@ if(el.previousElementSibling.type==="password"){
 }
 
 }
+var confirmTimer = null; // global timer holder
+
 function confirm_action(el){
-	var qs=el.getAttribute('data-qs');
-	var atrue=el.getAttribute('data-true');
-	var afalse=el.getAttribute('data-false');
-	var dp='"none"';
-	var html=qs +"<a href='"+atrue+"' class='k8-btn k8-green' style='margin-left:8px;'>YES</a><a href='"+afalse+"' style='margin-left:8px;' onclick='this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display="+dp+";' class='k8-btn k8-red'>NO</a>";
-	
-	
-	document.getElementsByClassName("ddata")[0].innerHTML=html;
-	document.getElementsByClassName("tnot")[0].style.display="block";
-	
+    var qs     = el.getAttribute('data-qs');
+    var atrue  = el.getAttribute('data-true');
+    var afalse = el.getAttribute('data-false');
+
+    var html = `${qs}<a href='${atrue}' class='k8-btn k8-green' style='margin-left:8px;'>YES</a>
+        <a href='${afalse}' style='margin-left:8px;' class='k8-btn k8-red' onclick='this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display="none";'>NO</a>`;
+
+    var box = document.getElementsByClassName("tnot")[0];
+    document.getElementsByClassName("ddata")[0].innerHTML = html;
+    box.style.display = "block";
+
+    // 🔥 CLEAR OLD TIMER
+    if (confirmTimer) {
+        clearTimeout(confirmTimer);
+    }
+
+    // ⏳ START NEW TIMER
+    confirmTimer = setTimeout(function(){
+        box.style.display = "none";
+    }, 10000);
 }
+
 
 
 window.addEventListener('load', () => {
