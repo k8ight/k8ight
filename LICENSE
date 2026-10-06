@@ -1,36 +1,71 @@
-K8ight Open Source License (KOSL) v1.0  
-An Extension of the GNU General Public License v3.0  
+# K8ight Open Source License (KOSL) v1.0
+### An Extension of the GNU Affero General Public License v3.0
 
 Copyright (C) 2025 K8ight Web Services  
-https://k8ight.com  
+https://k8ight.com
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version, with additional terms as stated below.  
+This program is free software: you can redistribute it and/or modify it under the terms of the **GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version, with additional terms as stated below.**
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  
+This program is distributed in the hope that it will be useful, but **WITHOUT ANY WARRANTY**; without even the implied warranty of **MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE**. See the **GNU Affero General Public License** for more details.
 
-You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.  
+You should have received a copy of the **GNU Affero General Public License** along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-### Additional Terms (Extending GPL-3.0)  
+### Additional Terms (Extending AGPL-3.0)
 
-1. Attribution Requirement  
-   All distributions and modifications of this software must include clear and visible attribution to K8ight Web Services.  
+**1. Attribution Requirement**
 
-2. No Warranty or Liability  
-   The software is provided "as is" without any warranty of any kind. K8ight Web Services is not liable for any direct, indirect, incidental, or consequential damages arising from its use.  
+All distributions and modifications of this software must include clear and visible attribution to **K8ight Web Services**.
 
-3. Trademark and Branding  
-   This license does not grant permission to use the K8ight Web Services name, logo, or trademarks without prior written consent.  
+**2. No Warranty or Liability**
 
-4. Compliance with K8ight Policies  
-   Use of this software must comply with the policies outlined at <https://k8ight.com/?policy>. Any violation of these policies may result in termination of the license.  
+The software is provided **"as is"** without any warranty of any kind. K8ight Web Services is not liable for any direct, indirect, incidental, or consequential damages arising from its use, to the maximum extent permitted by applicable law.
 
-5. Modification and Distribution  
-   Modifications are permitted under the same license, provided that:  
-   - Modifications are clearly documented.  
-   - The source code of modifications is made publicly available.  
-   - Any modified versions must not misrepresent their origin.  
+**3. Trademark and Branding**
 
-6. Patent Use  
-   This license includes a grant of rights to use any patents held by K8ight Web Services that are necessary to operate the software.  
+This license does not grant permission to use the **K8ight Web Services** name, logo, trademarks, service marks, or other branding without prior written consent.
 
-For full license terms, refer to the GNU General Public License v3.0 at <https://www.gnu.org/licenses/gpl-3.0.html> and the additional terms at <https://k8ight.com/?policy>.  
+**4. Compliance with K8ight Policies**
+
+Use of this software must comply with the policies outlined at:
+
+<https://k8ight.com/?policy>
+
+Any violation of these policies may result in termination of the rights granted under this license, to the extent permitted by the GNU Affero General Public License v3.0.
+
+**5. Modification and Distribution**
+
+Modifications are permitted under the same license, provided that:
+
+- Modifications are clearly documented.
+- The corresponding source code of modifications is made publicly available where required by the AGPL-3.0.
+- Any modified versions must not misrepresent their origin or falsely claim to be an official version of K8ight Web Services.
+
+**6. Patent Use**
+
+This license includes a grant of rights to use any patents held by K8ight Web Services that are necessary to operate the software, to the extent such rights are granted under the GNU Affero General Public License v3.0.
+
+### AGPL-3.0 Network Use Requirement
+
+Because KOSL is based on and extends the **GNU Affero General Public License v3.0**, all applicable requirements of the AGPL-3.0 concerning software used over a network remain in effect.
+
+In particular, where the AGPL-3.0 requires the corresponding source code of a modified version to be made available to users interacting with the software over a network, that requirement applies to KOSL-covered software and modifications.
+
+### Preservation of AGPL-3.0 Rights
+
+Except for the additional terms expressly stated in this license, all rights, permissions, conditions, limitations, and obligations of the **GNU Affero General Public License v3.0** apply.
+
+Nothing in KOSL is intended to remove or restrict rights granted by the AGPL-3.0 where such restriction is not permitted under the AGPL-3.0.
+
+For full license terms, refer to the **GNU Affero General Public License v3.0** at:
+
+<https://www.gnu.org/licenses/agpl-3.0.html>
+
+Additional K8ight policies are available at:
+
+<https://k8ight.com/?policy>
+
+---
+
+**K8ight Open Source License (KOSL) v1.0**  
+Copyright (C) 2025 K8ight Web Services  
+https://k8ight.com
